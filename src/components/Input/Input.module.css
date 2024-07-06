@@ -1,0 +1,21 @@
+.input {
+    font-size: 20px;
+    font-weight: 700;
+    outline: none;
+    border-radius: 0.5rem;
+    border: none;
+    padding: 5px 10px;
+    background-color: azure;
+    color: #000000;
+    box-shadow: 0px 0px 0px 1px #adadad;
+    transition: all 0.2s linear;
+}
+.input:hover {
+    transition: all 0.2s linear;
+    box-shadow: 0px 0px 10px 1px #10b3c5;
+}
+
+.input:focus {
+    transition: all 0.2s linear;
+    box-shadow: 0px 0px 0px 2px #10b3c5;
+}

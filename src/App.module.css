@@ -1,0 +1,24 @@
+.app-wrapper {
+    color: #10b3c5;
+    padding: 1.5rem;
+    height: 100vh;
+    width: 100vw;
+    background-color: #3eecac;
+    background-image: linear-gradient(19deg, #3eecac 0%, #ee74e1 100%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+}
+
+.article-wrapper {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    gap: 1.5em;
+    align-items: start;
+    justify-content: space-between;
+}

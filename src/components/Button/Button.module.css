@@ -1,0 +1,18 @@
+.button {
+    cursor: pointer;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 10px 15px;
+    font-size: large;
+    background-color: #10b3c5;
+    font-weight: 600;
+    color: azure;
+    transition: all 0.2s linear;
+}
+
+.button:hover {
+    color: #10b3c5;
+    background-color: azure;
+    transition: all 0.2s linear;
+    box-shadow: 0px 0px 10px 1px #10b3c5;
+}
