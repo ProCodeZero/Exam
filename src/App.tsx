@@ -6,13 +6,16 @@ import CassettesPreset from './components/CassettesPreset/CassettesPreset';
 import Dropdown from './components/Dropdown/Dropdown';
 import Form from './components/Form/Form';
 import Input from './components/Input/Input';
+import Result from './components/Result/Result';
 import { CollectResult } from './types/collectResult';
 import { Limit } from './types/limits';
 
 function App() {
     const [cassettesSelected, setCassettesSelected] = useState('');
     const [limits, setLimits] = useState<Limit>({});
-    // const [isError, setIsError] = useState(false);
+    const [result, setResult] = useState<CollectResult | undefined>({});
+    const [timeDelta, setTimeDelta] = useState(0);
+    const [isShowResult, setIsShowResult] = useState(true);
 
     function setArrayFromSelected() {
         const arr: number[] = [];
@@ -41,24 +44,29 @@ function App() {
             }
         }
         setLimits(obj);
+        alert('Данные по кассетам успешно записаны!');
     }
 
     function collectMoney(amount: number, nominals: number[]): CollectResult | undefined {
         if (amount === 0) return {};
         if (!nominals.length) return;
+
         const currentNominal = nominals[0];
         const availableNotes = limits[currentNominal].quantity;
         const notesNeeded = Math.floor(amount / currentNominal);
         const numberOfNotes = Math.min(notesNeeded, availableNotes);
 
-        const res = collectMoney(amount - currentNominal * numberOfNotes, nominals.slice(1));
+        for (let i = numberOfNotes; i >= 0; i--) {
+            const res = collectMoney(amount - i * currentNominal, nominals.slice(1));
 
-        if (res) {
-            return numberOfNotes ? { [currentNominal]: numberOfNotes, ...res } : res;
+            if (res) {
+                return i ? { [currentNominal]: i, ...res } : res;
+            }
         }
     }
 
     function calculateGiveMoney(e: React.FormEvent<HTMLFormElement>, limits: Limit) {
+        const startTime = performance.now();
         e.preventDefault();
 
         const target = e.currentTarget[0] as HTMLInputElement;
@@ -67,43 +75,57 @@ function App() {
             .map(Number)
             .sort((a, b) => b - a);
 
-        console.log(collectMoney(amountReq, nominals));
+        const allMoney = nominals.reduce((acc, el) => (acc += el * limits[el].quantity), 0);
+
+        if (amountReq === 0) alert('Вы запросили 0, к сожалению у нас нет так много)');
+        if (amountReq > allMoney) alert('В банкомате недостаточно средств для выдачи данной суммы');
+
+        setResult(collectMoney(amountReq, nominals));
+        const endTime = performance.now();
+        setTimeDelta(endTime - startTime);
+        setIsShowResult(true);
     }
 
     return (
         <div className={styles['app-wrapper']}>
-            <div className={styles['article-wrapper']}>
-                {/* <!-- Количество номиналов --> */}
-                <Article>
-                    <h3>Выберите количество кассет</h3>
-                    <Dropdown
-                        selected={cassettesSelected}
-                        setSelected={setCassettesSelected}
-                        options={[1, 2, 3, 4, 5, 6, 7, 8]}
-                    />
-                </Article>
-                <Article>
-                    <h3>Укажите сумму для получения</h3>
-                    <Form submit={(e) => calculateGiveMoney(e, limits)}>
-                        <Input placeholder="Сумма..." type="number" step={1} />
-                        <Button>Получить средства</Button>
-                    </Form>
-                </Article>
-            </div>
-            <div className={styles['article-wrapper']}>
-                <Article>
-                    {/* <!-- Номинал для каждой кассеты + количество оставшихся купюр --> */}
-                    <h3>Введите данные для каждой кассеты</h3>
-                    <Form submit={(e) => getCassettesSettings(e)}>
-                        {!cassettesSelected && (
-                            <p className={styles.warning}>Выберите количество кассет!</p>
-                        )}
-                        {!!cassettesSelected &&
-                            setArrayFromSelected().map((el) => <CassettesPreset key={el} />)}
-                        <Button>Выбрать введенные номиналы</Button>
-                    </Form>
-                </Article>
-            </div>
+            {isShowResult && (
+                <Result result={result} setClose={setIsShowResult} timeDelta={timeDelta} />
+            )}
+
+            <>
+                <div className={styles['article-wrapper']}>
+                    {/* <!-- Количество номиналов --> */}
+                    <Article>
+                        <h3>Выберите количество кассет</h3>
+                        <Dropdown
+                            selected={cassettesSelected}
+                            setSelected={setCassettesSelected}
+                            options={[1, 2, 3, 4, 5, 6, 7, 8]}
+                        />
+                    </Article>
+                    <Article>
+                        <h3>Укажите сумму для получения</h3>
+                        <Form submit={(e) => calculateGiveMoney(e, limits)}>
+                            <Input placeholder="Сумма..." type="number" step={1} />
+                            <Button>Получить средства</Button>
+                        </Form>
+                    </Article>
+                </div>
+                <div className={styles['article-wrapper']}>
+                    <Article>
+                        {/* <!-- Номинал для каждой кассеты + количество оставшихся купюр --> */}
+                        <h3>Введите данные для каждой кассеты</h3>
+                        <Form submit={(e) => getCassettesSettings(e)}>
+                            {!cassettesSelected && (
+                                <p className={styles.warning}>Выберите количество кассет!</p>
+                            )}
+                            {!!cassettesSelected &&
+                                setArrayFromSelected().map((el) => <CassettesPreset key={el} />)}
+                            <Button>Выбрать введенные номиналы</Button>
+                        </Form>
+                    </Article>
+                </div>
+            </>
         </div>
     );
 }

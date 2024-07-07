@@ -1,0 +1,23 @@
+.result {
+    position: absolute;
+    width: 960px;
+    height: 720px;
+    background-color: azure;
+    border-radius: 1.5rem;
+    box-shadow: 0px 0px 15px 0px #a8ffd0;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+    z-index: 100;
+}
+
+.list {
+    font-weight: normal;
+}
+
+.span {
+    color: #3eecac;
+}
