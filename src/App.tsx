@@ -1,40 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './App.module.css';
 import Article from './components/Article/Article';
 import Button from './components/Button/Button';
+import CassettesPreset from './components/CassettesPreset/CassettesPreset';
 import Dropdown from './components/Dropdown/Dropdown';
 import Form from './components/Form/Form';
 import Input from './components/Input/Input';
 
 function App() {
-    const [selected, setSelected] = useState('');
-    useEffect(() => {
-        console.log(selected);
-    }, [selected]);
+    // current value of cassettes
+    const [cassettesSelected, setCassettesSelected] = useState('');
+
+    function setArrayFromSelected() {
+        const arr: number[] = [];
+        for (let i = 0; i < Number(cassettesSelected); i++) arr.push(i + 1);
+        return arr;
+    }
+
     return (
         <div className={styles['app-wrapper']}>
             <div className={styles['article-wrapper']}>
                 {/* <!-- Количество номиналов --> */}
                 <Article>
                     <h3>Выберите количество кассет</h3>
-                    {/* <select
-                        className="form-select nominals-select"
-                        name="select"
-                        id="nominal-selector"
-                    >
-                        <option value="">--Выберите количество кассет--</option>
-                        <option value="1">1</option>
-                        <option value="2" selected>
-                            2
-                        </option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                    </select> */}
-                    <Dropdown selected={selected} setSelected={setSelected} />
+                    <Dropdown
+                        selected={cassettesSelected}
+                        setSelected={setCassettesSelected}
+                        options={[1, 2, 3, 4, 5, 6, 7, 8]}
+                    />
                 </Article>
                 <Article>
                     <h3>Укажите сумму для получения</h3>
@@ -47,10 +40,42 @@ function App() {
             <div className={styles['article-wrapper']}>
                 <Article>
                     {/* <!-- Номинал для каждой кассеты + количество оставшихся купюр --> */}
-                    <h3>Введите номинал для каждой кассеты</h3>
-                    <Form>
-                        <Input placeholder="Номинал..." type="number" />
-                        <Input placeholder="Номинал..." type="number" />
+                    <h3>Введите данные для каждой кассеты</h3>
+                    <Form
+                        submit={(e) => {
+                            e.preventDefault();
+                            const target = e.currentTarget;
+                            let res = {};
+                            for (let i = 0; i < target.length; i += 3) {
+                                if (i !== target.length - 1) {
+                                    const curNominal = target[i] as HTMLInputElement;
+                                    const curNumber = target[i + 1] as HTMLInputElement;
+                                    const curIsWorking = target[i + 2] as HTMLInputElement;
+                                    res = {
+                                        ...res,
+                                        nominal: curNominal.value,
+                                        details: {
+                                            quantity: curNumber.value,
+                                            isWorking: curIsWorking.checked,
+                                        },
+                                    };
+                                }
+                                console.log(res);
+                            }
+                            // const arr = [];
+                            // for (let i = 0; i < target.length; i++) {
+                            //     const curTg = target[i] as HTMLInputElement;
+                            //     if (curTg.type === 'checkbox') arr.push(curTg.checked);
+                            //     else arr.push(curTg.value);
+                            // }
+                            // console.log(arr);
+                        }}
+                    >
+                        {!cassettesSelected && (
+                            <p className={styles.warning}>Выберите количество кассет!</p>
+                        )}
+                        {!!cassettesSelected &&
+                            setArrayFromSelected().map((el) => <CassettesPreset key={el} />)}
                         <Button>Выбрать введенные номиналы</Button>
                     </Form>
                 </Article>

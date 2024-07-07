@@ -22,3 +22,7 @@
     align-items: start;
     justify-content: space-between;
 }
+
+.warning {
+    color: #3eecc3;
+}

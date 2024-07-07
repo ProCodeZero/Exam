@@ -1,0 +1,13 @@
+.cassettes-setting {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    gap: 1.5em;
+}
+.checkbox-label {
+    font-weight: normal;
+    user-select: none;
+    display: flex;
+    gap: 0.8em;
+    justify-content: center;
+}

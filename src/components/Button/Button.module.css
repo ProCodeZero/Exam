@@ -8,6 +8,7 @@
     font-weight: 600;
     color: azure;
     transition: all 0.2s linear;
+    max-width: fit-content;
 }
 
 .button:hover {

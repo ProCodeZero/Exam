@@ -4,11 +4,11 @@ import styles from './Dropdown.module.css';
 type Props = {
     selected: string;
     setSelected: Dispatch<SetStateAction<string>>;
+    options: number[] | string[];
 };
 
-export default function Dropdown({ selected, setSelected }: Props) {
+export default function Dropdown({ selected, setSelected, options }: Props) {
     const [isActive, setIsActive] = useState(false);
-    const options = [1, 2, 3, 4, 5, 6, 7, 8];
 
     return (
         <div className={styles.dropdown}>
