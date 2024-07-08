@@ -1,0 +1,28 @@
+.select {
+    transition: all 0.2s linear;
+    color: rgba(0, 0, 0, 0.588);
+    background-color: inherit;
+    border: 1px solid #0000004e;
+    font-size: 20px;
+    padding: 4.5px 10px;
+    border-radius: 0.5em;
+}
+.select:hover {
+    transition: all 0.2s linear;
+    box-shadow: 0px 0px 10px 1px #10b3c5;
+}
+
+.select:focus {
+    transition: all 0.2s linear;
+    box-shadow: 0px 0px 0px 2px #10b3c5;
+}
+
+.option {
+    transition: all 0.2s linear;
+    color: rgba(0, 0, 0, 0.588);
+    background-color: inherit;
+    border: 1px solid #0000004e;
+    font-size: 20px;
+    padding: 4.5px 10px;
+    border-radius: 0.5em;
+}

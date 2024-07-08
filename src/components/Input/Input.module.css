@@ -54,7 +54,7 @@ input[type='checkbox']:checked::before {
 }
 
 input[type='checkbox']:focus {
-    box-shadow: none;
+    box-shadow: 0px 0px 10px 1px #10b3c5;
 }
 
 input[type='checkbox']:disabled {

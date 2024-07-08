@@ -14,18 +14,20 @@ export default function Result({ result, timeDelta, setClose }: Props) {
         summarize.push([i, result[i]]);
     }
     return (
-        <div className={styles.result}>
-            <h3>Всего было затрачено:</h3>
-            <ul className={styles.list}>
-                {summarize.map((el, index) => (
-                    <li key={index}>
-                        Купюр номиналом <span className={styles.span}>{el[0]}</span> в количестве{' '}
-                        <span className={styles.span}>{el[1]}</span>
-                    </li>
-                ))}
-            </ul>
-            <p>Затраченное время: {timeDelta}ms</p>
-            <Button click={() => setClose(false)}>Вернуться на главную</Button>
+        <div className={styles['result-wrapper']}>
+            <div className={styles.result}>
+                <h3>Всего было затрачено:</h3>
+                <ul className={styles.list}>
+                    {summarize.map((el, index) => (
+                        <li key={index}>
+                            Купюр номиналом <span className={styles.span}>{el[0]}</span> в
+                            количестве <span className={styles.span}>{el[1]}</span>
+                        </li>
+                    ))}
+                </ul>
+                <p>Затраченное время: {timeDelta}ms</p>
+                <Button click={() => setClose(false)}>Вернуться на главную</Button>
+            </div>
         </div>
     );
 }

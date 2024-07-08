@@ -1,5 +1,14 @@
-.result {
+.result-wrapper {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
+    background-color: #00000030;
+}
+
+.result {
     width: 960px;
     height: 720px;
     background-color: azure;

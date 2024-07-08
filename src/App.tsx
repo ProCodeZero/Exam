@@ -15,7 +15,7 @@ function App() {
     const [limits, setLimits] = useState<Limit>({});
     const [result, setResult] = useState<CollectResult | undefined>({});
     const [timeDelta, setTimeDelta] = useState(0);
-    const [isShowResult, setIsShowResult] = useState(true);
+    const [isShowResult, setIsShowResult] = useState(false);
 
     function setArrayFromSelected() {
         const arr: number[] = [];
@@ -77,8 +77,14 @@ function App() {
 
         const allMoney = nominals.reduce((acc, el) => (acc += el * limits[el].quantity), 0);
 
-        if (amountReq === 0) alert('Вы запросили 0, к сожалению у нас нет так много)');
-        if (amountReq > allMoney) alert('В банкомате недостаточно средств для выдачи данной суммы');
+        if (amountReq === 0) {
+            alert('Вы запросили 0, к сожалению у нас нет так много)');
+            return;
+        }
+        if (amountReq > allMoney) {
+            alert('В банкомате недостаточно средств для выдачи данной суммы');
+            return;
+        }
 
         setResult(collectMoney(amountReq, nominals));
         const endTime = performance.now();
