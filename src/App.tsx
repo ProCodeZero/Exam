@@ -48,21 +48,36 @@ function App() {
     }
 
     function collectMoney(amount: number, nominals: number[]): CollectResult | undefined {
-        if (amount === 0) return {};
-        if (!nominals.length) return;
+        const dp: number[][] = Array.from(Array(amount + 1), () =>
+            Array(nominals.length + 1).fill(Infinity)
+        );
+        dp[0] = Array(nominals.length + 1).fill(0);
 
-        const currentNominal = nominals[0];
-        const availableNotes = limits[currentNominal].quantity;
-        const notesNeeded = Math.floor(amount / currentNominal);
-        const numberOfNotes = Math.min(notesNeeded, availableNotes);
-
-        for (let i = numberOfNotes; i >= 0; i--) {
-            const res = collectMoney(amount - i * currentNominal, nominals.slice(1));
-
-            if (res) {
-                return i ? { [currentNominal]: i, ...res } : res;
+        for (let i = 1; i <= nominals.length; i++) {
+            for (let j = 0; j <= amount; j++) {
+                if (nominals[i - 1] <= j) {
+                    dp[j][i] = Math.min(dp[j][i - 1], 1 + dp[j - nominals[i - 1]][i]);
+                } else {
+                    dp[j][i] = dp[j][i - 1];
+                }
             }
         }
+
+        if (dp[amount][nominals.length] === Infinity) return undefined;
+
+        const result: CollectResult = {};
+        let remainingAmount = amount;
+        for (let i = nominals.length; i > 0 && remainingAmount > 0; i--) {
+            while (
+                remainingAmount >= nominals[i - 1] &&
+                dp[remainingAmount][i] === 1 + dp[remainingAmount - nominals[i - 1]][i]
+            ) {
+                result[nominals[i - 1]] = (result[nominals[i - 1]] || 0) + 1;
+                remainingAmount -= nominals[i - 1];
+            }
+        }
+
+        return result;
     }
 
     function calculateGiveMoney(e: React.FormEvent<HTMLFormElement>, limits: Limit) {
